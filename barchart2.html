@@ -24,36 +24,33 @@
 </head>
 <body>
         <a href="./index.html">Home</a>
-    <svg class="chart"></svg>
+        <br/>
+    
     <script src="https://d3js.org/d3.v5.min.js" charset="utf-8"></script>
     <script>
-            var data = [4, 8, 15, 16, 23, 42];
-            var width = 420, 
-            barHeight = 20;
-        
-        
-            var x = d3.scale.linear()
-                .domain([0, d3.max(data)])
-                .range([0, width]);
-        
-            var chart = d3.select(".chart")
-                .attr("width", width)
-                .attr("height", barHeight * data.length);
+            var dataset = [4, 8, 15, 16, 23, 42, 32, 14, 54, 65, 32, 54, 43, 12, 21, 43, 23, 29, 12, 12, 43, 12, 45, 64, 74, 34, 64, 64 ];
+            var w = 500;
+            var h = 100;
+            var barPadding = 1;
 
-            var bar = chart.selectAll("g")
-                .data(data)
-                .enter().append("g")
-                    .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
+            //create the svg element
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
 
-            bar.append("rect")
-                .attr("width", x)
-                .attr("height", barHeight - 1);
+                svg.selectAll("rect")
+                .data(dataset)
+                .enter()
+                .append("rect")
+                .attr("x", function(d, i) {
+                    return i * (w /dataset.length);
+                })
+                .attr("y", function (d) { return d;})
+                .attr("width", w / dataset.length - barPadding)
+                .attr("height", 100);
 
-            bar.append("text")
-                .attr("x", function(d) { return x(d) - 3; })
-                .attr("y", barHeight / 2)
-                .attr("dy", ".35em")
-                .text(function(d) { return d.value; });
+
     </script>
     </body>
 
