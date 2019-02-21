@@ -35,7 +35,7 @@
                 .attr("class", "bar")
                 .style("height", function(d) { 
                     let barHeight =  d * 5; // Scale up by 5
-                    return barHeight + "px"; })
+                    return h - barHeight + "px"; })
                 .text(function(d) { return d; });
                 </script>
     </body>
