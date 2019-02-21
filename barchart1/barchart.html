@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-
+<script src="https://d3js.org/d3.v5.min.js"></script>
 	<head>
 	<title>D3 Tutorials</title>
 		
-	</head>
+    </head>
+    <body>
 		<a href="../index.html"> Home </a>
 										
 		<div class="chart"></div>
-        <script src="https://d3js.org/d3.v5.min.js"></script>
+        
         <link rel="stylesheet" href="./barchart.css">
 
 				<div class="chart"></div>
@@ -28,5 +29,6 @@
 						.style("width", function(d) { return x(d) + "px"; })
 						.text(function(d) { return d; });
 				
-				</script>
+                </script>
+    </body>
 </html>

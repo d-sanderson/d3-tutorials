@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v5.min.js"></script>
+	<head>
+	<title>Aleft tutorial</title>
+		
+    </head>
+    <body>
+		<a href="../index.html"> Home </a>
+				
+        
+        <link rel="stylesheet" href="./barchart.css">
+
+				<script src="//d3js.org/d3.v3.min.js"></script>
+				<script>
+				
+                var dataset = [ 5, 10, 15, 20, 25 ];
+                d3.select("body").selectAll("div")
+                .data(dataset)
+                .enter()
+                .append("p")
+                .text(function(d) { return d; });
+                
+
+				
+                </script>
+    </body>
+</html>
