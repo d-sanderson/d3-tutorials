@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v5.min.js"></script>
+	<head>
+    <style>
+    div.bar {
+        display: inline-block;
+        width: 20px;
+        height: 75px;
+        background-color: teal;
+        margin-right: 2px;
+    }    
+    </style>
+	<title>Mike Bostock - Circles tutorial</title>
+		
+    </head>
+    <body>
+		<a href="../index.html"> Home </a>
+				
+        
+        <br/>
+        <svg width="720" height="120">
+        
+          </svg>
+				<script src="//d3js.org/d3.v3.min.js"></script>
+				<script>
+                var data = [ 12, 64 ];
+                var svg = d3.select("svg");
+                var circle = svg.selectAll("circle")
+                .data(data)
+                circle.enter().append("circle")
+                .attr("r", 0)
+                .transition()
+                .attr("r", 2.5)
+                .attr("cx", function(d) { return d; })
+                .attr("cy", function(d) { return d; });
+                circle.exit().transition()
+                .attr("r", 0)
+                .remove();
+
+                
+                </script>
+    </body>
+</html>

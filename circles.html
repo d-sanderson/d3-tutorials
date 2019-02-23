@@ -29,7 +29,8 @@
                 var svg = d3.select("svg");
 
                 var circle = svg.selectAll("circle")
-                .data([32, 54, 219], function(d) { return d; })
+                //the function below rebinds the data to the existing circle elements
+                .data([3209, 54, 219], function(d) { return d; })
 
                 circle.enter().append("circle")
                 .attr("cy", 60)
