@@ -26,14 +26,40 @@
           </svg>
 				<script src="//d3js.org/d3.v3.min.js"></script>
 				<script>
-				var circle= d3.selectAll("circle");
-                circle.data([32, 57, 112]);
-                circle.style("fill", "blueviolet");
-                circle.attr("r", function(d) { return Math.sqrt(d); });
-                circle.attr("cx", function(d,i) { return i * 100 + 30; });
-                
-                
+                var svg = d3.select("svg");
 
+                var circle = svg.selectAll("circle")
+                .data([32, 54, 219], function(d) { return d; })
+
+                circle.enter().append("circle")
+                .attr("cy", 60)
+                .attr("cx", function(d, i) { return i * 100 + 30 })
+                .attr("r", function(d) { return Math.sqrt(d); })
+                circle.exit().remove();
+                // var circle = svg.selectAll("circle")
+                // .data([32, 57]);
+                // circle.exit().remove();
+
+                //     svg.selectAll("circle")
+                //     .data([3200, 57, 1102, 2930])
+                // .enter().append("circle")
+                //     .attr("cy", 60)
+                //     .attr("cx", function(d, i) { return i * 100 + 30; })
+                //     .attr("r", function(d) { return Math.sqrt(d); });
+
+
+				// var circle = d3.selectAll("circle")
+                //     .data([32, 57, 1102, 293]);
+
+                // circle.style("fill", "blueviolet");
+                // circle.attr("cx", function(d, i) { return i * 100 + 30; });
+                // circle.attr("r", function(d) { return Math.sqrt(d); });
+
+                // var circleEnter = circle.enter().append("circle");
+
+                // circleEnter.attr("cy", 60)
+                // circleEnter.attr("cx", function(d, i) { return i * 100 + 30; });
+                // circleEnter.attr("r", function(d) { return Math.sqrt(d); });
                 </script>
     </body>
 </html>
