@@ -37,6 +37,7 @@
                         .attr("width", w)
                         .attr("height", h);
 
+            //create circles
             var circles = svg.selectAll("circle")
             .data(dataset)
             .enter()
@@ -51,6 +52,7 @@
                 return Math.sqrt(h - d[1]);
             });
 
+            //create text
             svg.selectAll("text")
             .data(dataset)
             .enter()
