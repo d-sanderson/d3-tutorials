@@ -39,6 +39,9 @@
                 // set height and width
                 width = +svg.attr("width"),
                 height = +svg.attr("height"),
+                
+                //creates a group to contain our text svg elements
+                // i.e  <g> <text> ... <g>
                 g = svg.append("g").attr("transform", "translate(32," + (height / 2) + ")");
 
                 function update(data) {
@@ -61,7 +64,7 @@
                         .attr("class", "enter")
                     // Spaces the elements evenly along the x-axis
                         .attr("x", function(d, i) { return i * 32; })
-                    // 
+                    // Set the y axis of the letters
                         .attr("dy", ".35em")
                         .merge(text)
                         .text(function(d) { return d; });
@@ -75,8 +78,11 @@
 
                 //Grab a random sample of letters from the alphabet, in alphabetical order.
                 d3.interval(function() {
+                    //shuffle the alphabet array
                     update(d3.shuffle(alphabet)
+                    //grab a random letter from the shuffled alphabet array
                     .slice(0, Math.floor(Math.random() * 26))
+                    //sort it alphabetically
                     .sort());
                 }, 1500);
                 </script>
