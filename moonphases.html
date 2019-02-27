@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v5.min.js"></script>
+	<head>
+    <style>
+    body {
+        background-color: blue;
+    }
+    </style>
+	<title>Aleft tutorial</title>
+		
+    </head>
+    <body>
+		<a href="../index.html"> Home </a>
+				
+        
+    
+        <br/>
+
+       
+				<script src="//d3js.org/d3.v3.min.js"></script>
+				<script>
+            
+            x = 20;
+            y= 50;
+
+            var starData = [{x: 1 , y: 1 }, {x: 34 , y: 56 }, {x: 32 , y: 8 }, {x: 22 , y: 48 } ];
+            var canvas = d3.select("#starCanvas")
+            canvas.selectAll("circle")
+            .data( starData )
+            .enter()
+            .append("circle")
+            .attr("r", 1)
+            .attr("cx", function (d) { return d.x; } )
+            .attr("cy", function (d) { return d.y; } )
+
+
+            var moon = d3.select("moon")
+            moon.attr("cx", x).attr("cy", y)
+
+            var timer = d3.selectAll(".phase.timer");
+            timer.text(time);
+
+            
+                </script>
+    </body>
+</html>
