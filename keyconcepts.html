@@ -14,9 +14,34 @@
         border: solid 1px black;
     }
 
+    svg {
+        background-color: white
+    }
         </style>
 </head>
 <body>
     <div id="chart"></div>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script>
+
+    var w = 1000, h = 500
+    var svg = d3.select('#chart')
+    .append("svg")
+    .attr("width", w + "px")
+    .attr("height", h + "px");
+
+    d3.csv('boston-housing.csv', function(error, data) {
+        //console.log(data)
+       svg.selectAll('.dot')
+       .data(data)
+       .enter()
+       .append('circle')
+       .attr('cx', function(d, i) {return i * 30; })
+       .attr('cy', function(d, i) {return i * 30; })
+       .attr("r", 5)
+       .attr("fill", "purple")
+    });
+
+    </script>
 </body>
 </html>
