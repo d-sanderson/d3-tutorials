@@ -25,7 +25,20 @@
             y= 50;
 
             var starData = [{x: 1 , y: 1 }, {x: 34 , y: 56 }, {x: 32 , y: 8 }, {x: 22 , y: 48 } ];
+            
+            starData = starData.slice(0, starData.length - 3);
+            
             var canvas = d3.select("#starCanvas")
+            canvas.selectAll("circle")
+            .data( starData )
+            .exit()
+            .transition().duration(2000).style("stroke", "red").style("fill", "red")
+            .remove()
+
+            starData.push( {x: 23, y: 44}  );
+            starData.push( {x: 33, y: 54}  );
+            starData.push( {x: 43, y: 24}  );
+
             canvas.selectAll("circle")
             .data( starData )
             .enter()
@@ -33,6 +46,8 @@
             .attr("r", 1)
             .attr("cx", function (d) { return d.x; } )
             .attr("cy", function (d) { return d.y; } )
+            .style("stroke", "blue").style("fill", "blue")
+            .transition().duration(2000).style("stroke", "white").style("fill", "white");
 
 
             var moon = d3.select("moon")

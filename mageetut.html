@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="https://d3js.org/d3.v4.min.js"></script>
+	<head>
+    <style>
+   .bar {
+       fill: blue;
+
+   }
+    </style>
+	<title>Michael Magee tutorial</title>
+		
+    </head>
+    <body>
+		<a href="../index.html"> Home </a>
+				
+        
+    
+        <br/>
+
+        <svg width="960" height="680"></svg>
+
+       
+				<script>
+
+                    var data = d3.range(500).map(d3.randomBates(10));
+                    const svg = d3.select("svg");
+                    let width = svg.attr("width");
+                    let height = svg.attr("height") - 50;
+                    var g = svg.append("g");
+                    //Convert data into histogram format
+                    var bins = d3.histogram()
+                    (data);
+
+                    //Create X Scale
+                    var xScale = d3.scaleLinear()
+                    .rangeRound([0, width]);
+                    //Create Y Scale
+                    var yScale = d3.scaleLinear()
+                    .domain([0, d3.max(bins, function(d) { return d.length; })])
+                    .range([height, 0]);
+
+
+                    //Start Bars
+                    var bar = g.selectAll(".bar")
+                    .data(bins)
+                    .enter().append("g")
+                    .attr("transform", function(d) { return "translate(" + xScale(d.x0) + ", " + y(d.length) + ")" });
+                    //Add rectangles to bars
+                    bar.append("rect")
+                    .attr("x", 1)
+                    .attr("width", 20)
+                    .attr("height", function (d) { return height - y(d.length); });
+                </script>
+    </body>
+</html>
