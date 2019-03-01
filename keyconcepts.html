@@ -15,9 +15,33 @@
         margin: 50px auto;
         border: solid 1px black;
     }
+
+    #tooltip {
+        position: absolute;
+        background-color: #fff;
+        padding: 20px;
+        border: solid 1px black;
+        opacity: 0;
+
+
+    }
+
+    .axisLabel {
+        fill: #bbb;
+        font: arial;
+        font-size: 10px;
+    }
     .dot {
         stroke: #000;
         stroke-width: 1px;
+    }
+    
+    .axis line, .axis path {
+        stroke: #bbb
+
+    }
+    .axis text {
+        fill: #bbb
     }
     svg {
         background-color: white
@@ -27,13 +51,15 @@
 </head>
 
 <body>
-    <div id="chart"></div>
+   
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <div id="chart"></div>
+    <div id="tooltip"></div>
     <script>
 
     var margin = 30;
-    var circles, xScale, yScale;
-    var width = 1000, height = 500
+    var circles, xScale, yScale, xAxis, yAxis;
+    var width = 1000, height = 500, rValues = [ 2, 15 ];
 
     var svg = d3.select('#chart')
     .append("svg")
@@ -42,7 +68,12 @@
 
     d3.csv('boston-housing.csv', function(error, data) {
         //console.log(data)
+        //sorts data so that the elements dont cover eachother on the svg
+        data = data.sort(function(a, b) {
+            return a.charles - b.charles;
+        });
 
+        //calculate the min max vaues for the x (d.poor), y (d.rooms), and r (d.value) scale
         xMinMax = d3.extent(data, function(d) {
                 return parseFloat(d.poor);
         });
@@ -56,16 +87,22 @@
         });
 
         xScale = d3.scaleLinear()
-        .domain([xMinMax[0],xMinMax[1]])
-        .range([margin, width - margin]);
+        //swap the max and min x values to show more poor on the left and less poor on the right
+        .domain([xMinMax[1],xMinMax[0]])
+        .range([margin + rValues[1], width - margin - rValues[1]]);
 
         yScale = d3.scaleLinear()
-        .domain([yMinMax[0],yMinMax[1]])
-        .range([margin, height - margin]);
+        //swap the max and min y values to flip the chart upright 
+        .domain([yMinMax[1],yMinMax[0]])
+        .range([margin + rValues[1], height - margin - rValues[1]]);
 
         rScale = d3.scaleLinear()
         .domain([rMinMax[0],rMinMax[1]])
-        .range([2, 10]);
+        .range([rValues[0], rValues[1]]);
+
+        cScale = d3.scaleOrdinal()
+        .domain([0, 1])
+        .range(['blueviolet', 'green']);
 
         circles = svg.selectAll('.dot')
                     .data(data)
@@ -86,11 +123,93 @@
                         return rScale(d.value);
                         
                     })
-                    .attr("fill", "steelblue")
                     .style('opacity', function(d) {
                         return d.charles == 1 ? 1 : 0.3;
+                    })
+                    .on('mouseover', function(d){
+                    html = 'X | poor: ' + d.poor + '<br />';
+                    html += 'Y | rooms: ' + d.rooms + '<br />';
+                    html += 'R | value: ' + d.value + '<br />';
+                    html += 'C | charles: ' + d.charles;
+                    d3.select('#tooltip')
+                        .style('left', d3.event.pageX - 100 + 'px')
+                        .style('top', d3.event.pageY - 140 + 'px')
+                        .html(html)
+                        .style('opacity', 0.85);
+                })
+                    .on('mouseout', function() {
+                        d3.select("#tooltip")
+                        .style('left', -1000)
+                        .style('opacity', 0);
                     });
+
+                    //Adding X and Y Axes!
+
+                    //X Axis
+                    //starts at bottom value of the xScale
+                    xAxis = d3.axisBottom(xScale).ticks(0);
+                    xAxisG = svg.append('g')
+                    .attr('id', 'xAxis')
+                    .attr('class', 'axis');
+                    
+        
+                    xAxisG.call(xAxis)
+                    .attr('transform', 'translate(0,' + (height - margin ) + ')');
+                    
+                    //Y Axis
+                    yAxis = d3.axisLeft(yScale).tickValues([yMinMax[0], yMinMax[1]]);
+                    yAxisG = svg.append('g')
+                    .attr('id', 'yAxis')
+                    .attr('class', 'axis');
+                    
+                    yAxisG.call(yAxis)
+                    .attr('transform', 'translate(30, 0)');
+
+                    svg.append('text')
+                    .attr('x', xScale(xMinMax[0]))
+                    .attr('y', yScale(yMinMax[0]) + 30)
+                    .attr('text-anchor', 'middle')
+                    .attr('class', 'axisLabel' )
+                    .text('More Wealthy')
+
+                    svg.append('text')
+                    .attr('x', xScale(xMinMax[1]))
+                    .attr('y', yScale(yMinMax[0]) + 30)
+                    .attr('text-anchor', 'middle')
+                    .attr('class', 'axisLabel' )
+                    .text('Less Wealthy')
+
+                    svg.append('text')
+                    .attr('x', xScale(xMinMax[1]))
+                    .attr('y', yScale(yMinMax[1]) - 20)
+                    .attr('text-anchor', 'middle')
+                    .attr('class', 'axisLabel' )
+                    .text('More Rooms')
+
+                    svg.append('text')
+                    .attr('x', xScale(xMinMax[1]))
+                    .attr('y', yScale(yMinMax[0]) + 20)
+                    .attr('text-anchor', 'middle')
+                    .attr('class', 'axisLabel' )
+                    .text('Fewer Rooms')
+
+
+                    update();
     });
+
+    function update() {
+            circles.transition()
+            .delay(function(d, i) {
+               return i * 10;
+            })
+            .attr('r', function(d) {
+                return rScale(d.value);
+            })
+            .attr("fill", function(d) {
+                return cScale(d.charles);
+            })
+            
+    }
 
     </script>
 </body>
