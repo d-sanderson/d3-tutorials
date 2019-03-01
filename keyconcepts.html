@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
     <title>D3 Key Concepts</title>
+    
     <style type="text/css">
     body {
         background-color: #ccc;
@@ -13,33 +15,81 @@
         margin: 50px auto;
         border: solid 1px black;
     }
-
+    .dot {
+        stroke: #000;
+        stroke-width: 1px;
+    }
     svg {
         background-color: white
     }
         </style>
+
 </head>
+
 <body>
     <div id="chart"></div>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script>
 
-    var w = 1000, h = 500
+    var margin = 30;
+    var circles, xScale, yScale;
+    var width = 1000, height = 500
+
     var svg = d3.select('#chart')
     .append("svg")
-    .attr("width", w + "px")
-    .attr("height", h + "px");
+    .attr("width", width + "px")
+    .attr("height", height + "px");
 
     d3.csv('boston-housing.csv', function(error, data) {
         //console.log(data)
-       svg.selectAll('.dot')
-       .data(data)
-       .enter()
-       .append('circle')
-       .attr('cx', function(d, i) {return i * 30; })
-       .attr('cy', function(d, i) {return i * 30; })
-       .attr("r", 5)
-       .attr("fill", "purple")
+
+        xMinMax = d3.extent(data, function(d) {
+                return parseFloat(d.poor);
+        });
+
+        yMinMax = d3.extent(data, function(d) {
+        return parseFloat(d.rooms);
+        });
+
+        rMinMax = d3.extent(data, function(d) {
+        return parseFloat(d.value);
+        });
+
+        xScale = d3.scaleLinear()
+        .domain([xMinMax[0],xMinMax[1]])
+        .range([margin, width - margin]);
+
+        yScale = d3.scaleLinear()
+        .domain([yMinMax[0],yMinMax[1]])
+        .range([margin, height - margin]);
+
+        rScale = d3.scaleLinear()
+        .domain([rMinMax[0],rMinMax[1]])
+        .range([2, 10]);
+
+        circles = svg.selectAll('.dot')
+                    .data(data)
+                    .enter()
+                    .append('circle')
+                    .attr('cx', function(d) {
+                     
+                        return xScale(d.poor);
+                        
+                    })
+                    .attr('cy', function(d) {
+
+                        return yScale(d.rooms);
+                                               
+                    })
+                    .attr("r", function(d) {
+                      
+                        return rScale(d.value);
+                        
+                    })
+                    .attr("fill", "steelblue")
+                    .style('opacity', function(d) {
+                        return d.charles == 1 ? 1 : 0.3;
+                    });
     });
 
     </script>
