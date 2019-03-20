@@ -47,12 +47,13 @@
         background-color: white
     }
         </style>
-
+<script src="https://d3js.org/d3.v4.min.js"></script>
 </head>
 
 <body>
    
-    <script src="https://d3js.org/d3.v4.min.js"></script>
+    
+    <a href="../index.html"> Home </a>
     <div id="chart"></div>
     <div id="tooltip"></div>
     <script>
@@ -74,6 +75,7 @@
         });
 
         //calculate the min max vaues for the x (d.poor), y (d.rooms), and r (d.value) scale
+        //x, y and r MinMax become arrays with min max values ie [min, max]
         xMinMax = d3.extent(data, function(d) {
                 return parseFloat(d.poor);
         });
@@ -86,38 +88,46 @@
         return parseFloat(d.value);
         });
 
+        //Set Scales so that svg and react dynamically to different datasets
         xScale = d3.scaleLinear()
-        //swap the max and min x values to show more poor on the left and less poor on the right
+        //swap the max and min x values to show more poor on the left and less poor on the right (makes the chart more inuitive)
         .domain([xMinMax[1],xMinMax[0]])
+        //rValues are used to make it so the radius of circles dont cross over the axis lines
         .range([margin + rValues[1], width - margin - rValues[1]]);
 
         yScale = d3.scaleLinear()
-        //swap the max and min y values to flip the chart upright 
+        //swap the max and min y values to flip the chart upright bc svgs display upside down
         .domain([yMinMax[1],yMinMax[0]])
         .range([margin + rValues[1], height - margin - rValues[1]]);
 
+        // Radius Scale 
         rScale = d3.scaleLinear()
         .domain([rMinMax[0],rMinMax[1]])
         .range([rValues[0], rValues[1]]);
 
+        //color scale
         cScale = d3.scaleOrdinal()
         .domain([0, 1])
-        .range(['blueviolet', 'green']);
+        .range(['#333', '#FF6600']);
 
+        //create circles for each data point
         circles = svg.selectAll('.dot')
                     .data(data)
                     .enter()
                     .append('circle')
+                    //set x value to the poor data value
                     .attr('cx', function(d) {
                      
                         return xScale(d.poor);
                         
                     })
+                    //set y value to the number of rooms
                     .attr('cy', function(d) {
 
                         return yScale(d.rooms);
                                                
                     })
+                    // r value to value
                     .attr("r", function(d) {
                       
                         return rScale(d.value);
